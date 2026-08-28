@@ -64,6 +64,13 @@ a { text-decoration: none; color: inherit; }
 .logo .logo-title {
   font-family: "Space Grotesk", sans-serif; font-size: 19px; font-weight: 700; color: var(--blue); letter-spacing: -.01em;
 }
+.site-nav { display: flex; align-items: center; gap: 4px; }
+.site-nav a {
+  font-family: "Inter", "Noto Sans KR", sans-serif; font-weight: 600; font-size: 13.5px; color: var(--ink);
+  padding: 8px 13px; border-radius: 6px; white-space: nowrap; transition: color .2s, background .2s;
+}
+.site-nav a:hover { color: var(--blue); background: var(--blue-050); }
+@media (max-width: 900px) { .site-nav { display: none; } }
 .header-right { display: flex; align-items: center; gap: 14px; }
 .header-utility { display: flex; align-items: center; gap: 10px; }
 .brand-wordmark { display: flex; align-items: baseline; font-family: Verdana, "Noto Sans KR", sans-serif; font-size: 23px; color: var(--blue); }
@@ -157,19 +164,7 @@ a { text-decoration: none; color: inherit; }
 .division-card .cta .arrow { transition: transform .2s ease; }
 .division-card:hover .cta .arrow { transform: translateX(3px); }
 
-/* About strip */
-.about-strip {
-  background: var(--bg-alt2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  padding: 56px 0;
-}
-.about-strip .grid {
-  display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center;
-}
-@media (max-width: 800px) { .about-strip .grid { grid-template-columns: 1fr; } }
-.about-strip h2 {
-  font-family: "Space Grotesk", "Noto Sans KR", sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 14px;
-}
-.about-strip p { color: var(--muted); font-size: 14.5px; line-height: 1.75; }
+/* About strip (legacy brief blurb — superseded by .about-mega, kept for stat-card reuse) */
 .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .stat-card {
   background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px 16px; text-align: center;
@@ -178,6 +173,70 @@ a { text-decoration: none; color: inherit; }
   display: block; font-family: "Space Grotesk", sans-serif; font-size: 26px; font-weight: 700; color: var(--blue); margin-bottom: 4px;
 }
 .stat-card span { font-size: 12px; color: var(--muted); }
+
+/* ---------------- 회사소개 mega-section (single-scroll company profile) ---------------- */
+.about-mega { padding: 64px 0; border-bottom: 1px solid var(--border); }
+.about-mega.alt { background: var(--bg-alt2); }
+.about-mega.dark { background: var(--navy); color: #fff; border-bottom: none; }
+.about-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--blue);
+}
+.about-mega.dark .about-eyebrow { color: var(--blue-sky); }
+.about-eyebrow .line { flex-shrink: 0; width: 24px; height: 1px; background: var(--blue); }
+.about-mega.dark .about-eyebrow .line { background: var(--blue-sky); }
+.about-h2 {
+  font-family: "Space Grotesk", "Noto Sans KR", sans-serif; font-weight: 700;
+  font-size: clamp(24px, 3vw, 34px); line-height: 1.25; letter-spacing: -.01em; margin: 12px 0 18px;
+}
+.about-lede { color: var(--muted); font-size: 14.5px; line-height: 1.8; max-width: 820px; }
+.about-mega.dark .about-lede { color: #b8c4d9; }
+.about-mega p + p { margin-top: 14px; }
+.about-strong { color: var(--ink); font-weight: 700; }
+.about-mega.dark .about-strong { color: #fff; }
+.about-goals { margin-top: 24px; display: grid; gap: 10px; }
+.about-goals li {
+  display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: var(--ink); line-height: 1.6;
+  padding: 12px 16px; background: #fff; border: 1px solid var(--border); border-radius: 8px;
+}
+.about-goals li .dot { flex-shrink: 0; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); margin-top: 5px; }
+
+/* CEO greeting quote block */
+.ceo-quote {
+  margin-top: 20px; padding: 28px 30px; border-radius: 12px;
+  background: rgba(127,196,255,.08); border: 1px solid rgba(127,196,255,.3);
+  font-family: "Space Grotesk", "Noto Sans KR", sans-serif; font-style: italic; font-weight: 600; font-size: 17px; color: var(--blue-sky);
+  line-height: 1.55;
+}
+.ceo-sign { margin-top: 22px; font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .06em; color: #b8c4d9; }
+
+/* History timeline */
+.history-timeline { margin-top: 28px; border-left: 2px solid var(--blue-100); padding-left: 28px; display: grid; gap: 26px; }
+.history-item { position: relative; }
+.history-item::before {
+  content: ""; position: absolute; left: -33.5px; top: 4px; width: 11px; height: 11px; border-radius: 50%;
+  background: var(--blue); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--blue-100);
+}
+.history-year {
+  font-family: "Space Grotesk", sans-serif; font-weight: 700; font-style: italic; font-size: 20px; color: var(--blue); margin-bottom: 6px;
+}
+.history-item ul { display: grid; gap: 4px; }
+.history-item li { font-size: 13.5px; color: var(--ink); line-height: 1.55; }
+
+/* Partner badge grid */
+.partner-grid { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px; }
+.partner-badge {
+  font-family: "Inter", "Noto Sans KR", sans-serif; font-size: 12.5px; font-weight: 600; color: var(--ink);
+  background: #fff; border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px;
+}
+
+/* Location cards */
+.location-grid { margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+.location-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; }
+.location-card h3 { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 16px; color: var(--blue); margin-bottom: 12px; }
+.location-card p { font-size: 13px; color: var(--muted); line-height: 1.9; }
+.location-card p b { color: var(--ink); font-weight: 600; }
 
 /* Footer */
 .site-footer { background: var(--navy-2); color: #cfd6e2; padding: 44px 0 26px; }
