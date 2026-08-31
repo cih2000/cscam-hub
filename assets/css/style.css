@@ -14,7 +14,7 @@
   --bg-alt: #fafbfc;
   --bg-alt2: #f2f5f9;
   --container: 1320px;
-  --header-h: 78px;
+  --header-h: 68px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -86,7 +86,7 @@ a { text-decoration: none; color: inherit; }
 /* Hero */
 .hub-hero {
   position: relative; overflow: hidden;
-  padding: 100px 0 72px;
+  padding: 16px 0 18px;
   background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
   text-align: center;
 }
@@ -100,12 +100,12 @@ a { text-decoration: none; color: inherit; }
 .hub-hero .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 700; letter-spacing: .2em;
-  color: #cfe8ff; text-transform: uppercase; margin-bottom: 22px;
-  padding: 5px 14px; border: 1px solid rgba(127,196,255,.4); border-radius: 999px; background: rgba(127,196,255,.08);
+  color: #cfe8ff; text-transform: uppercase; margin-bottom: 10px;
+  padding: 4px 14px; border: 1px solid rgba(127,196,255,.4); border-radius: 999px; background: rgba(127,196,255,.08);
 }
 .hub-hero h1 {
   font-family: "Space Grotesk", "Noto Sans KR", sans-serif; font-size: clamp(28px, 4.2vw, 44px); font-weight: 700;
-  line-height: 1.32; color: var(--white, #fff); margin-bottom: 20px; letter-spacing: -.01em;
+  line-height: 1.32; color: var(--white, #fff); margin-bottom: 10px; letter-spacing: -.01em;
 }
 .hub-hero h1 em { font-style: normal; color: var(--blue-sky); }
 .hub-hero p {
@@ -114,10 +114,15 @@ a { text-decoration: none; color: inherit; }
 
 /* Division cards */
 .division-grid {
-  padding: 20px 0 100px;
+  padding: 5px 0 100px;
 }
 .division-grid .grid {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 28px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
+}
+@media (min-width: 1100px) {
+  .division-grid .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; justify-items: center;
+  }
 }
 
 .division-card {
@@ -149,23 +154,31 @@ a { text-decoration: none; color: inherit; }
   color: #cfe4ff; background: rgba(10,25,45,.55); border: 1px solid rgba(255,255,255,.25);
   padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(4px);
 }
-.division-card .thumb .tag {
+.division-card .thumb .tag-row {
   position: absolute; bottom: 14px; left: 16px; right: 16px; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.division-card .thumb .tag {
   color: #fff; font-family: "Space Grotesk", sans-serif; font-size: 20px; font-weight: 700;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
 }
-.division-card .body { padding: 20px 22px 24px; }
+.division-card .body { padding: 12px 22px 10px; }
 .division-card .body p {
-  font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; min-height: 63px;
+  font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 0; min-height: 44px;
 }
-.division-card .cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: 700; color: var(--blue);
+.division-card .thumb .cta {
+  display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+  font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.32);
+  padding: 6px 11px; border-radius: 999px; backdrop-filter: blur(4px);
+  transition: background .2s ease;
 }
-.division-card .cta .arrow { transition: transform .2s ease; }
-.division-card:hover .cta .arrow { transform: translateX(3px); }
+.division-card:hover .thumb .cta { background: rgba(255,255,255,.28); }
+.division-card .thumb .cta .arrow { transition: transform .2s ease; }
+.division-card:hover .thumb .cta .arrow { transform: translateX(3px); }
 
 /* About strip (legacy brief blurb — superseded by .about-mega, kept for stat-card reuse) */
-.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .stat-card {
   background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px 16px; text-align: center;
 }
