@@ -114,14 +114,14 @@ a { text-decoration: none; color: inherit; }
 
 /* Division cards */
 .division-grid {
-  padding: 5px 0 100px;
+  padding: 10px 0 100px;
 }
 .division-grid .grid {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
+  display: flex; flex-wrap: wrap; justify-content: center; row-gap: 7px; column-gap: 14px;
 }
 @media (min-width: 1100px) {
   .division-grid .grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; justify-items: center;
+    display: grid; grid-template-columns: repeat(3, 1fr); row-gap: 7px; column-gap: 14px; justify-items: center;
   }
 }
 
