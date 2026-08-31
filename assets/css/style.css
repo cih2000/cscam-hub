@@ -224,18 +224,38 @@ a { text-decoration: none; color: inherit; }
 }
 .ceo-sign { margin-top: 22px; font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .06em; color: #b8c4d9; }
 
-/* History timeline */
-.history-timeline { margin-top: 28px; border-left: 2px solid var(--blue-100); padding-left: 28px; display: grid; gap: 26px; }
-.history-item { position: relative; }
-.history-item::before {
-  content: ""; position: absolute; left: -33.5px; top: 4px; width: 11px; height: 11px; border-radius: 50%;
-  background: var(--blue); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--blue-100);
+/* History timeline (vertical, year-left style) */
+.history-timeline { margin-top: 28px; position: relative; }
+.history-timeline::before {
+  content: ""; position: absolute; top: 14px; bottom: 26px; left: 110px; width: 2px; background: var(--border); z-index: 1;
 }
+.history-row {
+  position: relative; display: grid; grid-template-columns: 92px 1fr; column-gap: 36px;
+  padding: 16px 0; align-items: start;
+}
+.history-row:first-child { padding-top: 0; }
+.history-row:last-child { padding-bottom: 0; }
+.history-row::before {
+  content: ""; position: absolute; top: 16px; left: 110px; transform: translateX(-50%);
+  width: 14px; height: 14px; border-radius: 50%; background: var(--blue); border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--blue-100); z-index: 2;
+}
+.history-row:first-child::before { top: 0; }
+.history-row::after {
+  content: ""; position: absolute; top: 16px; left: 128px; right: 0; height: 1px;
+  border-top: 1px dashed var(--border); z-index: 0;
+}
+.history-row:first-child::after { top: 0; }
 .history-year {
-  font-family: "Space Grotesk", sans-serif; font-weight: 700; font-style: italic; font-size: 20px; color: var(--blue); margin-bottom: 6px;
+  font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 21px; color: var(--muted); letter-spacing: -.01em;
 }
-.history-item ul { display: grid; gap: 4px; }
-.history-item li { font-size: 13.5px; color: var(--ink); line-height: 1.55; }
+.history-content { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.history-content li {
+  position: relative; padding-left: 15px; font-size: 14px; color: var(--ink); line-height: 1.55;
+}
+.history-content li::before {
+  content: ""; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--blue);
+}
 
 /* Partner badge grid */
 .partner-grid { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px; }
