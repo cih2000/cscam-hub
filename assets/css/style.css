@@ -108,6 +108,7 @@ a { text-decoration: none; color: inherit; }
   line-height: 1.32; color: var(--white, #fff); margin-bottom: 10px; letter-spacing: -.01em;
 }
 .hub-hero h1 em { font-style: normal; color: var(--blue-sky); }
+.hub-hero h1 .nowrap { white-space: nowrap; }
 .hub-hero p {
   font-size: 16px; color: #b8c4d9; max-width: 640px; margin: 0 auto; line-height: 1.7;
 }
