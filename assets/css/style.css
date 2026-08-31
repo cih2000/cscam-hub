@@ -265,8 +265,11 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* Location cards */
-.location-grid { margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
-.location-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; }
+.location-grid { margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.location-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.location-map { position: relative; width: 100%; height: 220px; background: var(--bg-alt2); }
+.location-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.location-body { padding: 22px 24px; }
 .location-card h3 { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 16px; color: var(--blue); margin-bottom: 12px; }
 .location-card p { font-size: 13px; color: var(--muted); line-height: 1.9; }
 .location-card p b { color: var(--ink); font-weight: 600; }
