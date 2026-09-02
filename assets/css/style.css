@@ -28,7 +28,7 @@ body {
 }
 img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
-.container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+.container { max-width: var(--container); margin: 0 auto; padding: 0 32px; }
 
 /* Family bar */
 .family-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 101; background: #05080d; border-bottom: 1px solid rgba(255,255,255,.06); }
@@ -96,7 +96,7 @@ a { text-decoration: none; color: inherit; }
                      linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
   background-size: 46px 46px;
 }
-.hub-hero .container { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; }
+.hub-hero .container { position: relative; z-index: 1; }
 .hub-hero .eyebrow {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 700; letter-spacing: .2em;
@@ -117,7 +117,6 @@ a { text-decoration: none; color: inherit; }
 .division-grid {
   padding: 10px 0 100px;
 }
-.division-grid .container { max-width: 860px; margin: 0 auto; }
 .division-grid .grid {
   display: grid; grid-template-columns: 1fr; row-gap: 18px;
 }
@@ -185,7 +184,6 @@ a { text-decoration: none; color: inherit; }
 
 /* ---------------- 회사소개 mega-section (single-scroll company profile) ---------------- */
 .about-mega { padding: 64px 0; border-bottom: 1px solid var(--border); }
-.about-mega .container { max-width: 860px; margin: 0 auto; }
 .about-mega.alt { background: var(--bg-alt2); }
 .about-mega.dark { background: var(--navy); color: #fff; border-bottom: none; }
 .about-mega.ceo-blue { background: var(--blue-050); }
