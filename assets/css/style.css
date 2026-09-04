@@ -104,13 +104,13 @@ a { text-decoration: none; color: inherit; }
   padding: 4px 14px; border: 1px solid rgba(127,196,255,.4); border-radius: 999px; background: rgba(127,196,255,.08);
 }
 .hub-hero h1 {
-  font-family: "Space Grotesk", "Noto Sans KR", sans-serif; font-size: clamp(28px, 4.2vw, 44px); font-weight: 700;
-  line-height: 1.32; color: var(--white, #fff); margin-bottom: 10px; letter-spacing: -.01em;
+  font-family: "Space Grotesk", "Noto Sans KR", sans-serif; font-size: clamp(26px, 4.6vw, 50px); font-weight: 700;
+  line-height: 1.2; color: var(--white, #fff); margin-bottom: 10px; letter-spacing: -.02em;
 }
 .hub-hero h1 em { font-style: normal; color: var(--blue-sky); }
 .hub-hero h1 .nowrap { white-space: nowrap; }
 .hub-hero p {
-  font-size: 16px; color: #b8c4d9; max-width: 640px; margin: 0 auto; line-height: 1.7;
+  font-size: 15px; color: #b8c4d9; max-width: 640px; margin: 0 auto; line-height: 1.75;
 }
 
 /* Division cards */
