@@ -133,6 +133,7 @@ a { text-decoration: none; color: inherit; }
   box-shadow: 0 14px 34px rgba(0,0,0,.4), 0 0 0 1px rgba(0,0,0,.35); transform-origin: center center;
   transition: box-shadow .3s ease, border-color .3s ease;
   display: block; text-decoration: none; cursor: pointer;
+  -webkit-user-drag: none; user-select: none; -webkit-touch-callout: none;
 }
 .hero-flow-item img {
   display: block; width: 100%; aspect-ratio: 1559/638; object-fit: cover; pointer-events: none;

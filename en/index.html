@@ -50,18 +50,18 @@
   </div>
   <div class="hero-flow-wrap" id="heroFlowWrap" aria-hidden="true">
     <div class="hero-flow-track" id="heroFlowTrack">
-      <a class="hero-flow-item" href="https://cnc.cscam.co.kr/?lang=en"><img src="../assets/img/card-cnc-en.jpg" alt="CNC Controller" loading="eager"></a>
-      <a class="hero-flow-item" href="https://lms.cscam.co.kr/en/index.html"><img src="../assets/img/card-lms-en.jpg" alt="LMS Solution" loading="eager"></a>
-      <a class="hero-flow-item" href="https://3dp.cscam.co.kr/?lang=en"><img src="../assets/img/card-3dp-en.jpg" alt="3D Printer" loading="eager"></a>
-      <a class="hero-flow-item" href="https://laser.cscam.co.kr/?lang=en"><img src="../assets/img/card-laser-en.jpg" alt="Laser Patterning" loading="eager"></a>
-      <a class="hero-flow-item" href="https://marking.cscam.co.kr/?lang=en"><img src="../assets/img/card-marking-en.jpg" alt="Marking Machine" loading="eager"></a>
-      <a class="hero-flow-item" href="https://sw.cscam.co.kr/?lang=en"><img src="../assets/img/card-sw-en.jpg" alt="SW Solution" loading="eager"></a>
-      <a class="hero-flow-item" href="https://cnc.cscam.co.kr/?lang=en"><img src="../assets/img/card-cnc-en.jpg" alt="" loading="eager"></a>
-      <a class="hero-flow-item" href="https://lms.cscam.co.kr/en/index.html"><img src="../assets/img/card-lms-en.jpg" alt="" loading="eager"></a>
-      <a class="hero-flow-item" href="https://3dp.cscam.co.kr/?lang=en"><img src="../assets/img/card-3dp-en.jpg" alt="" loading="eager"></a>
-      <a class="hero-flow-item" href="https://laser.cscam.co.kr/?lang=en"><img src="../assets/img/card-laser-en.jpg" alt="" loading="eager"></a>
-      <a class="hero-flow-item" href="https://marking.cscam.co.kr/?lang=en"><img src="../assets/img/card-marking-en.jpg" alt="" loading="eager"></a>
-      <a class="hero-flow-item" href="https://sw.cscam.co.kr/?lang=en"><img src="../assets/img/card-sw-en.jpg" alt="" loading="eager"></a>
+      <a class="hero-flow-item" draggable="false" href="https://cnc.cscam.co.kr/?lang=en"><img src="../assets/img/card-cnc-en.jpg" alt="CNC Controller" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://lms.cscam.co.kr/en/index.html"><img src="../assets/img/card-lms-en.jpg" alt="LMS Solution" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://3dp.cscam.co.kr/?lang=en"><img src="../assets/img/card-3dp-en.jpg" alt="3D Printer" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://laser.cscam.co.kr/?lang=en"><img src="../assets/img/card-laser-en.jpg" alt="Laser Patterning" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://marking.cscam.co.kr/?lang=en"><img src="../assets/img/card-marking-en.jpg" alt="Marking Machine" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://sw.cscam.co.kr/?lang=en"><img src="../assets/img/card-sw-en.jpg" alt="SW Solution" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://cnc.cscam.co.kr/?lang=en"><img src="../assets/img/card-cnc-en.jpg" alt="" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://lms.cscam.co.kr/en/index.html"><img src="../assets/img/card-lms-en.jpg" alt="" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://3dp.cscam.co.kr/?lang=en"><img src="../assets/img/card-3dp-en.jpg" alt="" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://laser.cscam.co.kr/?lang=en"><img src="../assets/img/card-laser-en.jpg" alt="" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://marking.cscam.co.kr/?lang=en"><img src="../assets/img/card-marking-en.jpg" alt="" loading="eager" draggable="false"></a>
+      <a class="hero-flow-item" draggable="false" href="https://sw.cscam.co.kr/?lang=en"><img src="../assets/img/card-sw-en.jpg" alt="" loading="eager" draggable="false"></a>
     </div>
   </div>
 </section>
@@ -392,6 +392,7 @@
   var half = items.length / 2;
   var pos = 0;
   var speed = 136; // px per second (흐르는 속도 추가 2배)
+  var dir = -1; // 흐름 방향(-1: 좌측으로, 1: 우측으로) - 드래그로 바뀔 수 있음
   var lastTs = null;
   var loopWidth = 0;
   var holdMs = 1500; // 중앙 최대화 구간을 통과하는 데 걸리는 시간(가로 중앙에서 좌우 대칭)
@@ -415,9 +416,14 @@
     var dt = Math.min((ts - lastTs) / 1000, 0.05);
     lastTs = ts;
 
-    pos -= speed * dt;
-    if (loopWidth > 0 && pos <= -loopWidth) pos += loopWidth;
-    track.style.transform = "translateY(-50%) translateX(" + pos + "px)";
+    if (!dragging) {
+      pos += dir * speed * dt;
+      if (loopWidth > 0) {
+        if (pos <= -loopWidth) pos += loopWidth;
+        else if (pos > 0) pos -= loopWidth;
+      }
+      track.style.transform = "translateY(-50%) translateX(" + pos + "px)";
+    }
 
     var wrapRect = wrap.getBoundingClientRect();
     var centerX = wrapRect.left + wrapRect.width / 2;
@@ -442,6 +448,53 @@
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
+
+  // 마우스 드래그 / 터치로 흐르는 방향을 직접 바꾸는 기능(KO의 카드 교체 방식과 비교용).
+  // 입력이 없으면 계속 dir 방향으로 자동으로 흐르고, 드래그하면 손가락/마우스를 따라
+  // 실시간으로 흐르다가 놓는 순간 그 드래그 방향이 이후의 자동 흐름 방향이 됨.
+  var dragging = false, lastX = null, dragMoved = false, suppressClick = false;
+  wrap.style.touchAction = "pan-y";
+  wrap.style.cursor = "grab";
+
+  wrap.addEventListener("pointerdown", function(e){
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    dragging = true;
+    lastX = e.clientX;
+    dragMoved = false;
+    wrap.style.cursor = "grabbing";
+    if (wrap.setPointerCapture) {
+      try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+  });
+  wrap.addEventListener("pointermove", function(e){
+    if (!dragging) return;
+    var dx = e.clientX - lastX;
+    lastX = e.clientX;
+    if (dx === 0) return;
+    if (Math.abs(dx) > 2) dragMoved = true;
+    pos += dx;
+    if (loopWidth > 0) {
+      if (pos <= -loopWidth) pos += loopWidth;
+      else if (pos > 0) pos -= loopWidth;
+    }
+    track.style.transform = "translateY(-50%) translateX(" + pos + "px)";
+    dir = dx > 0 ? 1 : -1; // 드래그 방향에 맞춰 이후 자동 흐름 방향도 갱신
+  });
+  function endDrag(e){
+    if (!dragging) return;
+    dragging = false;
+    wrap.style.cursor = "grab";
+    if (wrap.releasePointerCapture) {
+      try { wrap.releasePointerCapture(e.pointerId); } catch (err) {}
+    }
+    if (dragMoved) suppressClick = true;
+  }
+  wrap.addEventListener("pointerup", endDrag);
+  wrap.addEventListener("pointercancel", function(){ dragging = false; wrap.style.cursor = "grab"; });
+  // 드래그 직후에는 카드 링크로 바로 이동하지 않도록 클릭을 한 번 막음
+  track.addEventListener("click", function(e){
+    if (suppressClick) { e.preventDefault(); e.stopPropagation(); suppressClick = false; }
+  }, true);
 })();
 </script>
 <script>
