@@ -426,29 +426,33 @@
   // 마우스 드래그 / 터치 스와이프로 원하는 방향으로 한 칸씩 넘기기
   var DRAG_THRESHOLD = 40; // 이 이상 움직이면 스와이프로 인정(px)
   var TAP_THRESHOLD = 8;   // 이 이하 움직임은 그냥 클릭(카드 링크 이동)으로 처리
-  var startX = null, dragging = false, moved = false, suppressClick = false;
+  var startX = null, dragging = false, moved = false, suppressClick = false, capturedId = null;
 
   wrap.addEventListener("pointerdown", function(e){
     if (e.pointerType === "mouse" && e.button !== 0) return;
     startX = e.clientX;
     dragging = true;
     moved = false;
-    wrap.classList.add("is-dragging");
-    // 카드(<a>) 위에서 눌러도 이후 move/up 이벤트를 계속 이 요소가 받도록 포인터를 캡처
-    if (wrap.setPointerCapture) {
-      try { wrap.setPointerCapture(e.pointerId); } catch(err) {}
-    }
+    // 포인터 캡처는 "실제로 드래그로 확정된 순간"에만 걸어야 함.
+    // pointerdown에서 바로 캡처하면 일부 브라우저에서 단순 클릭(카드 링크 이동)까지 막혀버림.
   });
   wrap.addEventListener("pointermove", function(e){
     if (!dragging) return;
-    if (Math.abs(e.clientX - startX) > TAP_THRESHOLD) moved = true;
+    if (!moved && Math.abs(e.clientX - startX) > TAP_THRESHOLD) {
+      moved = true;
+      wrap.classList.add("is-dragging");
+      if (wrap.setPointerCapture) {
+        try { wrap.setPointerCapture(e.pointerId); capturedId = e.pointerId; } catch(err) {}
+      }
+    }
   });
   function endDrag(e){
     if (!dragging) return;
     dragging = false;
     wrap.classList.remove("is-dragging");
-    if (wrap.releasePointerCapture) {
-      try { wrap.releasePointerCapture(e.pointerId); } catch(err) {}
+    if (capturedId !== null && wrap.releasePointerCapture) {
+      try { wrap.releasePointerCapture(capturedId); } catch(err) {}
+      capturedId = null;
     }
     var dx = (e.clientX != null ? e.clientX : startX) - startX;
     if (Math.abs(dx) >= DRAG_THRESHOLD) {

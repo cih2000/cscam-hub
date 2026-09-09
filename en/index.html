@@ -452,7 +452,8 @@
   // 마우스 드래그 / 터치로 흐르는 방향을 직접 바꾸는 기능(KO의 카드 교체 방식과 비교용).
   // 입력이 없으면 계속 dir 방향으로 자동으로 흐르고, 드래그하면 손가락/마우스를 따라
   // 실시간으로 흐르다가 놓는 순간 그 드래그 방향이 이후의 자동 흐름 방향이 됨.
-  var dragging = false, lastX = null, dragMoved = false, suppressClick = false;
+  var dragging = false, lastX = null, dragMoved = false, suppressClick = false, capturedId = null;
+  var MOVE_THRESHOLD = 3; // 이 이상 움직여야 "드래그로 확정"하고 포인터를 캡처(단순 클릭은 절대 캡처하지 않도록)
   wrap.style.touchAction = "pan-y";
   wrap.style.cursor = "grab";
 
@@ -461,17 +462,21 @@
     dragging = true;
     lastX = e.clientX;
     dragMoved = false;
-    wrap.style.cursor = "grabbing";
-    if (wrap.setPointerCapture) {
-      try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
-    }
+    // 포인터 캡처는 pointerdown에서 바로 걸지 않음 - 즉시 캡처하면 일부 브라우저에서
+    // 단순 클릭(카드 링크 이동)까지 함께 막혀버리는 문제가 있었음.
   });
   wrap.addEventListener("pointermove", function(e){
     if (!dragging) return;
     var dx = e.clientX - lastX;
     lastX = e.clientX;
     if (dx === 0) return;
-    if (Math.abs(dx) > 2) dragMoved = true;
+    if (!dragMoved && Math.abs(dx) > MOVE_THRESHOLD) {
+      dragMoved = true;
+      wrap.style.cursor = "grabbing";
+      if (wrap.setPointerCapture) {
+        try { wrap.setPointerCapture(e.pointerId); capturedId = e.pointerId; } catch (err) {}
+      }
+    }
     pos += dx;
     if (loopWidth > 0) {
       if (pos <= -loopWidth) pos += loopWidth;
@@ -484,8 +489,9 @@
     if (!dragging) return;
     dragging = false;
     wrap.style.cursor = "grab";
-    if (wrap.releasePointerCapture) {
-      try { wrap.releasePointerCapture(e.pointerId); } catch (err) {}
+    if (capturedId !== null && wrap.releasePointerCapture) {
+      try { wrap.releasePointerCapture(capturedId); } catch (err) {}
+      capturedId = null;
     }
     if (dragMoved) suppressClick = true;
   }
