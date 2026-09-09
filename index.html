@@ -397,6 +397,10 @@
   var holdMs = 1500; // 중앙 최대화 구간을 통과하는 데 걸리는 시간(가로 중앙에서 좌우 대칭)
   var plateauHalf = speed * (holdMs / 1000) / 2; // 중앙 기준 좌우 대칭 "최대 크기 유지" 반폭
   var rampDist = 80; // 유지 구간 양옆에서 원래 크기로 줄어드는/커지는 거리 (다음 카드와 겹치게 늘림 -> 부드러운 교차)
+  var peakAmp = 2.35; // 중앙 확대 배율(모바일에서는 화면을 넘지 않도록 축소)
+  function updatePeakAmp(){ peakAmp = window.innerWidth <= 720 ? 0.9 : 2.35; }
+  updatePeakAmp();
+  window.addEventListener("resize", updatePeakAmp);
 
   function layout(){
     if (items.length < half + 1) { loopWidth = 0; return; }
@@ -426,7 +430,7 @@
       var rampIn = Math.max(0, actualDist - plateauHalf);
       var ratio = Math.min(rampIn / rampDist, 1);
       var eased = ratio * ratio * (3 - 2 * ratio); // smoothstep: 서서히 커졌다가 서서히 줄어듦
-      var scale = 1 + (1 - eased) * 2.35; // 중앙 3.35배(하단 6개 카드의 약 4/5 크기) -> 원래 크기(1.0배)
+      var scale = 1 + (1 - eased) * peakAmp; // 중앙 최대 배율(데스크톱 3.35배 / 모바일 1.9배) -> 원래 크기(1.0배)
       var opacity = 1 - eased * 0.4;
       it.style.transform = "scale(" + scale.toFixed(3) + ")";
       it.style.opacity = opacity.toFixed(2);
