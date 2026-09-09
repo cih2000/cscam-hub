@@ -50,12 +50,12 @@
   </div>
   <div class="hero-shift-wrap" id="heroShiftWrap" aria-hidden="true">
     <div class="hero-shift-stage" id="heroShiftStage">
-      <a class="hero-shift-card" href="https://cnc.cscam.co.kr/"><img src="assets/img/card-cnc.jpg" alt="CNC Controller" loading="eager" draggable="false"></a>
-      <a class="hero-shift-card" href="https://lms.cscam.co.kr/"><img src="assets/img/card-lms.jpg" alt="LMS Solution" loading="eager" draggable="false"></a>
-      <a class="hero-shift-card" href="https://3dp.cscam.co.kr/"><img src="assets/img/card-3dp.jpg" alt="3D Printer" loading="eager" draggable="false"></a>
-      <a class="hero-shift-card" href="https://laser.cscam.co.kr/"><img src="assets/img/card-laser.jpg" alt="Laser Patterning" loading="eager" draggable="false"></a>
-      <a class="hero-shift-card" href="https://marking.cscam.co.kr/"><img src="assets/img/card-marking.jpg" alt="Marking Machine" loading="eager" draggable="false"></a>
-      <a class="hero-shift-card" href="https://sw.cscam.co.kr/"><img src="assets/img/card-sw.jpg" alt="SW Solution" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" draggable="false" href="https://cnc.cscam.co.kr/"><img src="assets/img/card-cnc.jpg" alt="CNC Controller" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" draggable="false" href="https://lms.cscam.co.kr/"><img src="assets/img/card-lms.jpg" alt="LMS Solution" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" draggable="false" href="https://3dp.cscam.co.kr/"><img src="assets/img/card-3dp.jpg" alt="3D Printer" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" draggable="false" href="https://laser.cscam.co.kr/"><img src="assets/img/card-laser.jpg" alt="Laser Patterning" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" draggable="false" href="https://marking.cscam.co.kr/"><img src="assets/img/card-marking.jpg" alt="Marking Machine" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" draggable="false" href="https://sw.cscam.co.kr/"><img src="assets/img/card-sw.jpg" alt="SW Solution" loading="eager" draggable="false"></a>
     </div>
   </div>
 </section>
@@ -434,6 +434,10 @@
     dragging = true;
     moved = false;
     wrap.classList.add("is-dragging");
+    // 카드(<a>) 위에서 눌러도 이후 move/up 이벤트를 계속 이 요소가 받도록 포인터를 캡처
+    if (wrap.setPointerCapture) {
+      try { wrap.setPointerCapture(e.pointerId); } catch(err) {}
+    }
   });
   wrap.addEventListener("pointermove", function(e){
     if (!dragging) return;
@@ -443,6 +447,9 @@
     if (!dragging) return;
     dragging = false;
     wrap.classList.remove("is-dragging");
+    if (wrap.releasePointerCapture) {
+      try { wrap.releasePointerCapture(e.pointerId); } catch(err) {}
+    }
     var dx = (e.clientX != null ? e.clientX : startX) - startX;
     if (Math.abs(dx) >= DRAG_THRESHOLD) {
       suppressClick = true;
