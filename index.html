@@ -389,7 +389,8 @@
   var n = cards.length;
   if (n < 3) return;
   var current = 0;
-  var holdMs = 1500; // 카드 교체 간격(중앙 확대 상태 유지 시간)
+  var holdMs = 1500; // 중앙에 완전히 도착한 뒤 정지 상태로 유지되는 시간
+  var transitionMs = 650; // CSS transition 시간(assets/css/style.css의 .hero-shift-card transition과 일치)
 
   function render(){
     cards.forEach(function(card, i){
@@ -408,7 +409,7 @@
   setInterval(function(){
     current = (current + 1) % n;
     render();
-  }, holdMs);
+  }, holdMs + transitionMs); // 이동(transitionMs) + 정지 유지(holdMs)를 합친 주기라 중앙에서 실제로 1.5초간 정지 상태로 보임
 })();
 </script>
 <script>
