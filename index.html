@@ -50,12 +50,12 @@
   </div>
   <div class="hero-shift-wrap" id="heroShiftWrap" aria-hidden="true">
     <div class="hero-shift-stage" id="heroShiftStage">
-      <a class="hero-shift-card" href="https://cnc.cscam.co.kr/"><img src="assets/img/card-cnc.jpg" alt="CNC Controller" loading="eager"></a>
-      <a class="hero-shift-card" href="https://lms.cscam.co.kr/"><img src="assets/img/card-lms.jpg" alt="LMS Solution" loading="eager"></a>
-      <a class="hero-shift-card" href="https://3dp.cscam.co.kr/"><img src="assets/img/card-3dp.jpg" alt="3D Printer" loading="eager"></a>
-      <a class="hero-shift-card" href="https://laser.cscam.co.kr/"><img src="assets/img/card-laser.jpg" alt="Laser Patterning" loading="eager"></a>
-      <a class="hero-shift-card" href="https://marking.cscam.co.kr/"><img src="assets/img/card-marking.jpg" alt="Marking Machine" loading="eager"></a>
-      <a class="hero-shift-card" href="https://sw.cscam.co.kr/"><img src="assets/img/card-sw.jpg" alt="SW Solution" loading="eager"></a>
+      <a class="hero-shift-card" href="https://cnc.cscam.co.kr/"><img src="assets/img/card-cnc.jpg" alt="CNC Controller" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" href="https://lms.cscam.co.kr/"><img src="assets/img/card-lms.jpg" alt="LMS Solution" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" href="https://3dp.cscam.co.kr/"><img src="assets/img/card-3dp.jpg" alt="3D Printer" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" href="https://laser.cscam.co.kr/"><img src="assets/img/card-laser.jpg" alt="Laser Patterning" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" href="https://marking.cscam.co.kr/"><img src="assets/img/card-marking.jpg" alt="Marking Machine" loading="eager" draggable="false"></a>
+      <a class="hero-shift-card" href="https://sw.cscam.co.kr/"><img src="assets/img/card-sw.jpg" alt="SW Solution" loading="eager" draggable="false"></a>
     </div>
   </div>
 </section>
@@ -381,8 +381,9 @@
   // 다음 카드로 "교체(shift)"되는 방식. 카드 6개 중 3개(좌/중앙/우)만 화면에 보이고,
   // 나머지는 대기 상태로 화면 밖에 위치. current 인덱스 하나만으로 모든 위치가 계산되는
   // 순수 상태 기반 구조라 이전의 연속 흐름 방식에서 있었던 위치 꼬임 문제가 구조적으로 발생하지 않음.
+  var wrap = document.getElementById("heroShiftWrap");
   var stage = document.getElementById("heroShiftStage");
-  if (!stage) return;
+  if (!wrap || !stage) return;
   if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   var cards = Array.prototype.slice.call(stage.children);
@@ -391,6 +392,7 @@
   var current = 0;
   var holdMs = 1500; // 중앙에 완전히 도착한 뒤 정지 상태로 유지되는 시간
   var transitionMs = 650; // CSS transition 시간(assets/css/style.css의 .hero-shift-card transition과 일치)
+  var autoTimer = null;
 
   function render(){
     cards.forEach(function(card, i){
@@ -405,11 +407,54 @@
     });
   }
 
-  render();
-  setInterval(function(){
-    current = (current + 1) % n;
+  function scheduleAuto(){
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(function(){
+      shift(1); // 입력이 없을 때는 항상 정방향으로 자동 진행
+    }, holdMs + transitionMs);
+  }
+
+  function shift(dir){
+    current = (current + dir + n) % n;
     render();
-  }, holdMs + transitionMs); // 이동(transitionMs) + 정지 유지(holdMs)를 합친 주기라 중앙에서 실제로 1.5초간 정지 상태로 보임
+    scheduleAuto(); // 수동으로 넘긴 경우에도 여기서부터 다시 1.5초 자동 타이머 재시작
+  }
+
+  render();
+  scheduleAuto();
+
+  // 마우스 드래그 / 터치 스와이프로 원하는 방향으로 한 칸씩 넘기기
+  var DRAG_THRESHOLD = 40; // 이 이상 움직이면 스와이프로 인정(px)
+  var TAP_THRESHOLD = 8;   // 이 이하 움직임은 그냥 클릭(카드 링크 이동)으로 처리
+  var startX = null, dragging = false, moved = false, suppressClick = false;
+
+  wrap.addEventListener("pointerdown", function(e){
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    startX = e.clientX;
+    dragging = true;
+    moved = false;
+    wrap.classList.add("is-dragging");
+  });
+  wrap.addEventListener("pointermove", function(e){
+    if (!dragging) return;
+    if (Math.abs(e.clientX - startX) > TAP_THRESHOLD) moved = true;
+  });
+  function endDrag(e){
+    if (!dragging) return;
+    dragging = false;
+    wrap.classList.remove("is-dragging");
+    var dx = (e.clientX != null ? e.clientX : startX) - startX;
+    if (Math.abs(dx) >= DRAG_THRESHOLD) {
+      suppressClick = true;
+      shift(dx < 0 ? 1 : -1); // 왼쪽으로 스와이프: 다음 카드, 오른쪽으로 스와이프: 이전 카드
+    }
+  }
+  wrap.addEventListener("pointerup", endDrag);
+  wrap.addEventListener("pointercancel", function(){ dragging = false; wrap.classList.remove("is-dragging"); });
+  // 드래그로 판정된 동작 직후에는 카드 링크로 바로 이동하지 않도록 클릭을 한 번 막음
+  stage.addEventListener("click", function(e){
+    if (suppressClick) { e.preventDefault(); e.stopPropagation(); suppressClick = false; }
+  }, true);
 })();
 </script>
 <script>

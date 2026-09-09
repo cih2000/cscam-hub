@@ -148,7 +148,9 @@ a { text-decoration: none; color: inherit; }
 /* Hero shift showcase (신규 제안: 흐르지 않고 1.5초 간격으로 중앙 카드가 교체되는 방식) */
 .hero-shift-wrap {
   position: relative; margin-top: 34px; height: 430px; overflow: hidden;
+  touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none;
 }
+.hero-shift-wrap.is-dragging { cursor: grabbing; }
 .hero-shift-wrap::before, .hero-shift-wrap::after {
   content: ""; position: absolute; top: 0; bottom: 0; width: 160px; z-index: 6; pointer-events: none;
 }
