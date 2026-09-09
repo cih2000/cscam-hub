@@ -48,14 +48,20 @@
     <h1>제조의 미래를 바꾸는 지능형 융합기술로<br><em>씨에스캠</em>이 제시하는 최첨단 솔루션</h1>
     <p>CNC, 소프트웨어, AI가 하나로 결합된 씨에스캠의 차세대 핵심 솔루션을 경험해 보세요.</p>
   </div>
-  <div class="hero-shift-wrap" id="heroShiftWrap" aria-hidden="true">
-    <div class="hero-shift-stage" id="heroShiftStage">
-      <a class="hero-shift-card" href="https://cnc.cscam.co.kr/"><img src="assets/img/card-cnc.jpg" alt="CNC Controller" loading="eager"></a>
-      <a class="hero-shift-card" href="https://lms.cscam.co.kr/"><img src="assets/img/card-lms.jpg" alt="LMS Solution" loading="eager"></a>
-      <a class="hero-shift-card" href="https://3dp.cscam.co.kr/"><img src="assets/img/card-3dp.jpg" alt="3D Printer" loading="eager"></a>
-      <a class="hero-shift-card" href="https://laser.cscam.co.kr/"><img src="assets/img/card-laser.jpg" alt="Laser Patterning" loading="eager"></a>
-      <a class="hero-shift-card" href="https://marking.cscam.co.kr/"><img src="assets/img/card-marking.jpg" alt="Marking Machine" loading="eager"></a>
-      <a class="hero-shift-card" href="https://sw.cscam.co.kr/"><img src="assets/img/card-sw.jpg" alt="SW Solution" loading="eager"></a>
+  <div class="hero-flow-wrap" id="heroFlowWrap" aria-hidden="true">
+    <div class="hero-flow-track" id="heroFlowTrack">
+      <a class="hero-flow-item" href="https://cnc.cscam.co.kr/"><img src="assets/img/card-cnc.jpg" alt="CNC Controller" loading="eager"></a>
+      <a class="hero-flow-item" href="https://lms.cscam.co.kr/"><img src="assets/img/card-lms.jpg" alt="LMS Solution" loading="eager"></a>
+      <a class="hero-flow-item" href="https://3dp.cscam.co.kr/"><img src="assets/img/card-3dp.jpg" alt="3D Printer" loading="eager"></a>
+      <a class="hero-flow-item" href="https://laser.cscam.co.kr/"><img src="assets/img/card-laser.jpg" alt="Laser Patterning" loading="eager"></a>
+      <a class="hero-flow-item" href="https://marking.cscam.co.kr/"><img src="assets/img/card-marking.jpg" alt="Marking Machine" loading="eager"></a>
+      <a class="hero-flow-item" href="https://sw.cscam.co.kr/"><img src="assets/img/card-sw.jpg" alt="SW Solution" loading="eager"></a>
+      <a class="hero-flow-item" href="https://cnc.cscam.co.kr/"><img src="assets/img/card-cnc.jpg" alt="" loading="eager"></a>
+      <a class="hero-flow-item" href="https://lms.cscam.co.kr/"><img src="assets/img/card-lms.jpg" alt="" loading="eager"></a>
+      <a class="hero-flow-item" href="https://3dp.cscam.co.kr/"><img src="assets/img/card-3dp.jpg" alt="" loading="eager"></a>
+      <a class="hero-flow-item" href="https://laser.cscam.co.kr/"><img src="assets/img/card-laser.jpg" alt="" loading="eager"></a>
+      <a class="hero-flow-item" href="https://marking.cscam.co.kr/"><img src="assets/img/card-marking.jpg" alt="" loading="eager"></a>
+      <a class="hero-flow-item" href="https://sw.cscam.co.kr/"><img src="assets/img/card-sw.jpg" alt="" loading="eager"></a>
     </div>
   </div>
 </section>
@@ -377,38 +383,65 @@
 </script>
 <script>
 (function(){
-  // 신규 제안: 연속으로 흐르지 않고, 중앙 카드가 확대된 채로 일정 시간 유지되다가
-  // 다음 카드로 "교체(shift)"되는 방식. 카드 6개 중 3개(좌/중앙/우)만 화면에 보이고,
-  // 나머지는 대기 상태로 화면 밖에 위치. current 인덱스 하나만으로 모든 위치가 계산되는
-  // 순수 상태 기반 구조라 이전의 연속 흐름 방식에서 있었던 위치 꼬임 문제가 구조적으로 발생하지 않음.
-  var stage = document.getElementById("heroShiftStage");
-  if (!stage) return;
+  var wrap = document.getElementById("heroFlowWrap");
+  var track = document.getElementById("heroFlowTrack");
+  if (!wrap || !track) return;
   if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  var cards = Array.prototype.slice.call(stage.children);
-  var n = cards.length;
-  if (n < 3) return;
-  var current = 0;
-  var holdMs = 1500; // 카드 교체 간격(중앙 확대 상태 유지 시간)
+  var items = Array.prototype.slice.call(track.children);
+  var half = items.length / 2;
+  var pos = 0;
+  var speed = 136; // px per second (흐르는 속도 추가 2배)
+  var lastTs = null;
+  var loopWidth = 0;
+  var holdMs = 1500; // 중앙 최대화 구간을 통과하는 데 걸리는 시간(가로 중앙에서 좌우 대칭)
+  var plateauHalf = speed * (holdMs / 1000) / 2; // 중앙 기준 좌우 대칭 "최대 크기 유지" 반폭
+  var rampDist = 80; // 유지 구간 양옆에서 원래 크기로 줄어드는/커지는 거리 (다음 카드와 겹치게 늘림 -> 부드러운 교차)
+  var peakAmp = 2.35; // 중앙 확대 배율(모바일에서는 화면을 넘지 않도록 축소)
+  function updatePeakAmp(){ peakAmp = window.innerWidth <= 720 ? 0.9 : 2.35; }
+  updatePeakAmp();
+  window.addEventListener("resize", updatePeakAmp);
 
-  function render(){
-    cards.forEach(function(card, i){
-      var diff = (i - current + n) % n; // 0..n-1
-      var signed = diff > n / 2 ? diff - n : diff; // 중앙(0) 기준 좌우 상대 위치
-      card.classList.remove("pos-center", "pos-left", "pos-right", "pos-hidden-left", "pos-hidden-right");
-      if (signed === 0) card.classList.add("pos-center");
-      else if (signed === 1) card.classList.add("pos-right");
-      else if (signed === -1) card.classList.add("pos-left");
-      else if (signed > 0) card.classList.add("pos-hidden-right");
-      else card.classList.add("pos-hidden-left");
-    });
+  function layout(){
+    if (items.length < half + 1) { loopWidth = 0; return; }
+    loopWidth = items[half].offsetLeft - items[0].offsetLeft;
   }
+  layout();
+  window.addEventListener("resize", layout);
+  window.addEventListener("load", layout);
 
-  render();
-  setInterval(function(){
-    current = (current + 1) % n;
-    render();
-  }, holdMs);
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dt = Math.min((ts - lastTs) / 1000, 0.05);
+    lastTs = ts;
+
+    pos -= speed * dt;
+    if (loopWidth > 0 && pos <= -loopWidth) pos += loopWidth;
+    track.style.transform = "translateY(-50%) translateX(" + pos + "px)";
+
+    var wrapRect = wrap.getBoundingClientRect();
+    var centerX = wrapRect.left + wrapRect.width / 2;
+    items.forEach(function(it){
+      var r = it.getBoundingClientRect();
+      var itemCenter = r.left + r.width / 2;
+      var actualDist = Math.abs(itemCenter - centerX);
+
+      // 중앙을 기준으로 좌우 대칭인 "고원" 구간: 이 안에 있으면 항상 최대 크기 (상태 저장 없이 순수 위치 기반이라 꼬일 일이 없음)
+      var rampIn = Math.max(0, actualDist - plateauHalf);
+      var ratio = Math.min(rampIn / rampDist, 1);
+      var eased = ratio * ratio * (3 - 2 * ratio); // smoothstep: 서서히 커졌다가 서서히 줄어듦
+      var scale = 1 + (1 - eased) * peakAmp; // 중앙 최대 배율(데스크톱 3.35배 / 모바일 1.9배) -> 원래 크기(1.0배)
+      var opacity = 1 - eased * 0.4;
+      it.style.transform = "scale(" + scale.toFixed(3) + ")";
+      it.style.opacity = opacity.toFixed(2);
+      it.style.zIndex = String(Math.round((1 - ratio) * 100));
+      if (ratio < 0.14) it.classList.add("is-active");
+      else it.classList.remove("is-active");
+    });
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 })();
 </script>
 <script>
@@ -426,7 +459,7 @@
     "https://marking.cscam.co.kr/": { local: "../cscam-marking/index.html", gh: GH + "/cscam-marking/index.html" },
     "https://sw.cscam.co.kr/": { local: "../cscam-sw/index.html", gh: GH + "/cscam-sw/index.html" }
   };
-  document.querySelectorAll(".division-card, .family-bar-nav a, .hero-shift-card").forEach(function(a){
+  document.querySelectorAll(".division-card, .family-bar-nav a, .hero-flow-item").forEach(function(a){
     var href = a.getAttribute("href");
     var entry = map[href];
     if (entry) a.setAttribute("href", isLocal ? entry.local : entry.gh);
