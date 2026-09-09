@@ -86,7 +86,7 @@ a { text-decoration: none; color: inherit; }
 /* Hero */
 .hub-hero {
   position: relative; overflow: hidden;
-  padding: 16px 0 18px;
+  padding: 0;
   background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
   text-align: center;
 }
@@ -149,7 +149,7 @@ a { text-decoration: none; color: inherit; }
 
 /* Hero shift showcase (중앙 카드 1개만 아래 division-card와 동일한 너비로 표시, 테두리 없음) */
 .hero-shift-wrap {
-  position: relative; margin-top: 34px; overflow: hidden; border-radius: 14px;
+  position: relative; margin-top: 0; overflow: hidden; border-radius: 14px;
   aspect-ratio: 1559 / 638;
   touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none;
 }
@@ -180,9 +180,6 @@ a { text-decoration: none; color: inherit; }
 .hero-shift-card.pos-right {
   transform: translateX(100%);
   opacity: 0; z-index: 3;
-}
-@media (max-width: 720px) {
-  .hero-shift-wrap { margin-top: 22px; }
 }
 
 /* Division cards */
