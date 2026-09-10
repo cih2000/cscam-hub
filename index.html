@@ -388,7 +388,7 @@
   if (n < 2) return;
   var current = 0;
   var holdMs = 1500; // 중앙에 완전히 도착한 뒤 정지 상태로 유지되는 시간
-  var transitionMs = 650; // CSS transition 시간(assets/css/style.css의 .hero-shift-card transition과 일치)
+  var transitionMs = 750; // CSS transition 시간(assets/css/style.css의 .hero-shift-card transition과 일치, 관성 곡선)
   var autoTimer = null;
 
   function render(){
