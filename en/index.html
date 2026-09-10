@@ -391,12 +391,27 @@
   var transitionMs = 750; // CSS transition 시간(assets/css/style.css의 .hero-shift-card transition과 일치, 관성 곡선)
   var autoTimer = null;
 
+  // 전체 6장 중 지금 몇 번째 이미지인지 보여주는 점(dot) 표시
+  var dotsWrap = document.createElement("div");
+  dotsWrap.className = "hero-shift-dots";
+  var dotEls = cards.map(function(_, i){
+    var d = document.createElement("span");
+    d.className = "dot";
+    dotsWrap.appendChild(d);
+    return d;
+  });
+  wrap.appendChild(dotsWrap);
+  function updateDots(){
+    dotEls.forEach(function(d, i){ d.classList.toggle("active", i === current); });
+  }
+
   function render(){
     // 최초 진입 시에만 사용: 애니메이션 없이 현재 카드를 중앙에, 나머지는 오른쪽 대기 상태로 배치
     cards.forEach(function(card, i){
       card.classList.remove("pos-center", "pos-left", "pos-right");
       card.classList.add(i === current ? "pos-center" : "pos-right");
     });
+    updateDots();
   }
 
   function scheduleAuto(){
@@ -425,6 +440,7 @@
     void nextCard.offsetWidth; // 강제 리플로우로 위치를 즉시 반영
     nextCard.classList.remove("no-transition", "pos-left", "pos-right");
     nextCard.classList.add("pos-center");
+    updateDots();
 
     scheduleAuto(); // 수동으로 넘긴 경우에도 여기서부터 다시 1.5초 자동 타이머 재시작
   }
