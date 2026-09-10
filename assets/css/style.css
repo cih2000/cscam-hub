@@ -29,6 +29,8 @@ body {
 img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
 .container { max-width: var(--container); margin: 0 auto; padding: 0 32px; }
+@media (max-width: 600px) { .container { padding: 0 18px; } }
+@media (max-width: 480px) { .container { padding: 0 16px; } }
 
 /* Family bar */
 .family-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 101; background: #05080d; border-bottom: 1px solid rgba(255,255,255,.06); }
