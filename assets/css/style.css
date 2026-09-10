@@ -161,7 +161,7 @@ a { text-decoration: none; color: inherit; }
      left:50% + translateX(-50%)로 컨테이너(=하단 6개 카드와 동일한 .container) 중앙선 기준 강제 중앙정렬 */
   position: relative; left: 50%; transform: translateX(-50%);
   overflow: hidden; border-radius: 14px;
-  aspect-ratio: 1559 / 638;
+  aspect-ratio: 1559 / 713; /* CNC 카드 이미지(세로로 더 크게 캡처)가 잘리지 않고 전체가 보이도록 박스 비율 조정 */
   width: 120%; max-width: calc(100vw - 32px); /* 컨테이너보다 넓게 돌출(양쪽 최소 16px 여백만 확보) */
   touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none;
 }
