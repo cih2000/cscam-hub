@@ -211,10 +211,33 @@ a { text-decoration: none; color: inherit; }
   background: #fff; transform: scale(1.35);
 }
 
+/* "전체 솔루션 카드 보기" 버튼을 히어로 카드 안쪽 중앙 하단에 반투명으로 배치 */
+.hero-shift-toggle-row {
+  position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 10;
+}
+.hero-shift-toggle-row .division-grid-toggle {
+  border-radius: 10px;
+  background: rgba(10,20,35,.26); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.16); color: rgba(223,231,242,.8);
+  box-shadow: 0 8px 24px rgba(0,0,0,.16);
+}
+.hero-shift-toggle-row .division-grid-toggle:hover {
+  background: rgba(10,20,35,.45); border-color: rgba(255,255,255,.3); color: rgba(223,231,242,.95);
+  box-shadow: 0 10px 28px rgba(0,0,0,.24);
+}
+/* 좁은 화면에서는 중앙 하단 버튼과 우측 하단 점(dot) 표시가 겹칠 수 있어, 점 표시를 상단으로 옮김 */
+@media (max-width: 560px) {
+  .hero-shift-dots { top: 14px; right: 14px; bottom: auto; }
+  .hero-shift-toggle-row .division-grid-toggle { padding: 9px 16px; font-size: 12px; gap: 6px; }
+  .hero-shift-toggle-row .division-grid-toggle .chevron { width: 11px; height: 11px; }
+  .hero-shift-toggle-row { bottom: 10px; }
+}
+
 /* Division cards */
 .division-grid {
-  padding: 10px 0 50px;
+  padding: 40px 0 50px;
 }
+/* division-grid-toggle-row: 버튼이 히어로 카드 안쪽(.hero-shift-toggle-row)으로 이동해 현재 미사용, 스타일만 남겨둠 */
 .division-grid-toggle-row {
   display: flex; align-items: center; gap: 18px; margin: 46px 0 32px;
 }
