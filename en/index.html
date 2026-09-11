@@ -358,9 +358,11 @@
   var labelOpen = "View all division cards";
   var labelClose = "Collapse";
   var open = false;
+  var gridSection = wrap.closest(".division-grid");
   btn.addEventListener("click", function(){
     open = !open;
     btn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (gridSection) gridSection.classList.toggle("is-open", open);
     if (label) label.textContent = open ? labelClose : labelOpen;
     if (open) {
       wrap.style.maxHeight = wrap.scrollHeight + "px";
