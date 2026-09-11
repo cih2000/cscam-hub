@@ -240,7 +240,11 @@ a { text-decoration: none; color: inherit; }
 }
 /* 좁은 화면에서는 중앙 하단 버튼과 우측 하단 점(dot) 표시가 겹칠 수 있어, 점 표시를 상단으로 옮김 */
 @media (max-width: 560px) {
-  .hero-shift-dots { top: 14px; right: 14px; bottom: auto; }
+  .hero-shift-dots {
+    top: 14px; right: 14px; bottom: auto;
+    /* 점 6개 표시도 기존(모바일 기준) 크기의 절반으로 축소, 우측 상단 모서리 기준 축소 */
+    transform: scale(.5); transform-origin: top right;
+  }
   .hero-shift-toggle-row .division-grid-toggle { padding: 9px 16px; font-size: 12px; gap: 6px; }
   .hero-shift-toggle-row .division-grid-toggle .chevron { width: 11px; height: 11px; }
   /* 버튼이 카드를 가릴 만큼 커서 기존(모바일 기준) 크기의 절반으로 축소 */
