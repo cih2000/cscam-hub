@@ -170,8 +170,9 @@ a { text-decoration: none; color: inherit; }
 @media (min-width: 761px) {
   .hero-shift-wrap {
     min-height: calc(100vh - var(--header-h) - 32px);
-    /* 좌우에 배경색이 보이지 않도록 뷰포트 전체 폭으로 꽉 채움(모서리 둥근 카드 느낌은 제거) */
-    width: 100vw; max-width: 100vw; border-radius: 0;
+    /* 좌우에 배경색이 보이지 않도록 뷰포트 전체 폭으로 꽉 채움.
+       모서리는 완전히 각지게 하지 않고 하단 division-card(14px)와 동일하게 둥글려 디자인 통일감 유지 */
+    width: 100vw; max-width: 100vw; border-radius: 14px;
   }
 }
 .hero-shift-wrap.is-dragging { cursor: grabbing; }
@@ -254,7 +255,9 @@ a { text-decoration: none; color: inherit; }
   transition: padding .45s ease;
 }
 .division-grid.is-open {
-  padding: 40px 0 50px;
+  /* 상단: 히어로 바로 아래라 여백이 40px뿐이면 버튼과 카드가 붙어 보여, 하단 여백(50px + 다음 섹션 자체 상단 32px = 82px)과
+     비슷한 체감이 되도록 넉넉히 키움 */
+  padding: 90px 0 50px;
 }
 /* division-grid-toggle-row: 버튼이 히어로 카드 안쪽(.hero-shift-toggle-row)으로 이동해 현재 미사용, 스타일만 남겨둠 */
 .division-grid-toggle-row {
