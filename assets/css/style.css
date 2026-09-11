@@ -230,7 +230,8 @@ a { text-decoration: none; color: inherit; }
   .hero-shift-dots { top: 14px; right: 14px; bottom: auto; }
   .hero-shift-toggle-row .division-grid-toggle { padding: 9px 16px; font-size: 12px; gap: 6px; }
   .hero-shift-toggle-row .division-grid-toggle .chevron { width: 11px; height: 11px; }
-  .hero-shift-toggle-row { bottom: 10px; }
+  /* 버튼이 카드를 가릴 만큼 커서 기존(모바일 기준) 크기의 절반으로 축소 */
+  .hero-shift-toggle-row { bottom: 4px; transform: translateX(-50%) scale(.5); transform-origin: center bottom; }
 }
 
 /* Division cards */
